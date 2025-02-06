@@ -13,7 +13,7 @@ export default function AssignmentEditor() {
                 <div className="mb-4">
                     <div className="col-sm-9">
                 <textarea id="wd-description" className="form-control" rows={7}>
-                    The assignment is available online Submit a link to the landing page of
+                    The assignment is available online Submit a link to the landing page of webpage.
                 </textarea>
                     </div>
                 </div>
