@@ -29,7 +29,7 @@ export default function KambazNavigation() {
                       }`
                   }>
                 <AiOutlineDashboard className="fs-1 text-danger"/><br/>Dashboard</NavLink>
-            <NavLink to="/Kambaz/Dashboard" id="wd-course-link"
+            <NavLink to="/Kambaz/Courses" id="wd-course-link"
                      className={({ isActive }) =>
                          `list-group-item text-center border-0 ${
                              isActive ? "bg-light text-danger" : "bg-black text-white"
