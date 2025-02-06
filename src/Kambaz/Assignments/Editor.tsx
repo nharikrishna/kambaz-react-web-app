@@ -28,11 +28,8 @@ export default function AssignmentEditor() {
                         <label htmlFor="wd-points"
                                className="float-end">Points</label>
                     </Col>
-                    <Col xs="9"
-                         style={{
-                             maxWidth: '550px'
-                         }}>
-                        <div className="col-sm-10" style={{minWidth: '250px'}}>
+                    <Col xs="9">
+                        <div className="col-sm-10" style={{minWidth: '250px', maxWidth: '550px'}}>
                             <input id="wd-points" value={100} className="form-control"/>
                         </div>
                     </Col>
@@ -43,11 +40,8 @@ export default function AssignmentEditor() {
                     <label htmlFor="wd-group" className="float-end">Assignment
                                 Group</label>
                         </Col>
-                        <Col xs="9"
-                             style={{
-                                 maxWidth: '550px'
-                             }}>
-                            <div className="col-sm-10" style={{minWidth: '250px'}}>
+                        <Col xs="9">
+                            <div className="col-sm-10" style={{minWidth: '250px', maxWidth: '550px'}}>
                                 <select id="wd-group" className="form-select">
                                     <option>ASSIGNMENTS</option>
                                 </select>
@@ -62,11 +56,8 @@ export default function AssignmentEditor() {
                             <label htmlFor="wd-display-grade-as" className="float-end">
                                 Display Grade as</label>
                         </Col>
-                        <Col xs="9"
-                             style={{
-                                 maxWidth: '550px'
-                             }}>
-                            <div className="col-sm-10" style={{minWidth: '250px'}}>
+                        <Col xs="9">
+                            <div className="col-sm-10" style={{minWidth: '250px', maxWidth: '550px'}}>
                                 <select id="wd-display-grade-as" className="form-select">
                                     <option>Percentage</option>
                                 </select>

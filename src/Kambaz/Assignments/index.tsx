@@ -7,7 +7,7 @@ import {FaPlus} from "react-icons/fa6";
 
 export default function Assignments() {
     return (
-        <div id="wd-assignments">
+        <div id="wd-assignments" className="col-sm-11">
             <Row>
                 <Col xs={6}>
                     <input className="form-control me-2" type="text"
@@ -32,7 +32,10 @@ export default function Assignments() {
                     <div className="wd-title p-3 ps-2 bg-secondary">
                         <BsGripVertical className="me-2 fs-3"/> Assignments
                         <AssignmentTitleButtons/>
-                        <div className="float-end me-2">40% of Total</div>
+                        <div className="float-end me-1" style={{
+                            border: "2px solid grey",
+                            borderRadius: "15px",
+                            padding: "2px"}}>40% of Total</div>
                     </div>
                     <ListGroup className="wd-assignment-list rounded-0">
                         <ListGroup.Item
