@@ -4,8 +4,13 @@ import LessonControlButtons from "../Courses/Modules/LessonControlButtons.tsx";
 import AssignmentTitleButtons from "./AssignmentTitleButtons.tsx";
 import AssignmentButton from "./AssignmentButtons.tsx";
 import {FaPlus} from "react-icons/fa6";
+import { useParams } from "react-router-dom";
+import * as db from "../Database"
 
 export default function Assignments() {
+    const { cid } = useParams();
+    const assignments = db.assignments.filter(a => a.course_id === cid);
+
     return (
         <div id="wd-assignments" className="col-sm-11">
             <Row>
@@ -37,64 +42,27 @@ export default function Assignments() {
                             borderRadius: "15px",
                             padding: "2px"}}>40% of Total</div>
                     </div>
-                    <ListGroup className="wd-assignment-list rounded-0">
-                        <ListGroup.Item
-                            className="wd-assignment-list-item p-0 fs-5 border-gray">
-                            <Row>
-                                <Col xs={2} className="m-auto"><AssignmentButton/></Col>
-                                <Col xs={8}>
-                                    <a href="#/Kambaz/Courses/5100/Assignments/1"
-                                       className="wd-assignment-link text-decoration-none text-black">
-                                        <b>A1</b>
-                                        <p>
-                                            <span className="text-danger">Multiple Modules </span>
-                                            |
-                                            <b> Not available until</b> May 6 at 12:00 am |
-                                            <br/><b> Due</b> May 13 at 11:59 pm | 100 pts
-                                        </p>
-                                    </a>
-                                </Col>
-                                <Col xs={2} className="m-auto"><LessonControlButtons/></Col>
-                            </Row>
-                        </ListGroup.Item>
-                        <ListGroup.Item
-                            className="wd-assignment-list-item p-0 fs-5 border-gray">
-                            <Row>
-                                <Col xs={2} className="m-auto"><AssignmentButton/></Col>
-                                <Col xs={8}>
-                                    <a href="#/Kambaz/Courses/5100/Assignments/1"
-                                       className="wd-assignment-link text-decoration-none text-black">
-                                        <b>A2</b>
-                                        <p>
-                                            <span className="text-danger">Multiple Modules </span>
-                                            |
-                                            <b> Not available until</b> May 13 at 12:00 am |
-                                            <br/><b> Due</b> May 20 at 11:59 pm | 100 pts
-                                        </p>
-                                    </a>
-                                </Col>
-                                <Col xs={2} className="m-auto"><LessonControlButtons/></Col>
-                            </Row>
-                        </ListGroup.Item>
-                        <ListGroup.Item
-                            className="wd-assignment-list-item p-0 fs-5 border-gray">
-                            <Row>
-                                <Col xs={2} className="m-auto"><AssignmentButton/></Col>
-                                <Col xs={8}>
-                                    <a href="#/Kambaz/Courses/5100/Assignments/1"
-                                       className="wd-assignment-link text-decoration-none text-black">
-                                        <b>A3</b>
-                                        <p>
-                                            <span className="text-danger">Multiple Modules </span>
-                                            |
-                                            <b> Not available until</b> May 20 at 12:00 am |
-                                            <br/><b> Due</b> May 27 at 11:59 pm | 100 pts
-                                        </p>
-                                    </a>
-                                </Col>
-                                <Col xs={2} className="m-auto"><LessonControlButtons/></Col>
-                            </Row>
-                        </ListGroup.Item>
+                    <ListGroup>
+                        {assignments.map((assignment) => (
+                            <ListGroup.Item key={assignment.title} className="wd-assignment-list-item p-0 fs-5 border-gray">
+                                <Row>
+                                    <Col xs={2} className="m-auto"><AssignmentButton /></Col>
+                                    <Col xs={8}>
+                                        <a href={`#/Kambaz/Courses/${cid}/Assignments/${assignment.id}`}
+                                           className="wd-assignment-link text-decoration-none text-black">
+                                            <b>{assignment.title}</b>
+                                            <p>
+                                                <span className="text-danger">Multiple Modules </span>
+                                                |
+                                                <b> Not available until</b> {assignment.not_available_until} |
+                                                <br /><b> Due</b> {assignment.due} | {assignment.points}
+                                            </p>
+                                        </a>
+                                    </Col>
+                                    <Col xs={2} className="m-auto"><LessonControlButtons /></Col>
+                                </Row>
+                            </ListGroup.Item>
+                        ))}
                     </ListGroup>
                 </ListGroup.Item>
             </ListGroup>
