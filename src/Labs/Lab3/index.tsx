@@ -23,8 +23,14 @@ import Spreading from "./Spreading.tsx";
 import Destructing from "./Destructuring.tsx";
 import FunctionDestructing from "./FunctionDestructuring.tsx";
 import DestructingImports from "./DestructuringImports.tsx";
+import Classes from "./Classes.tsx";
+import Add from "./Add.tsx";
+import Square from "./Square.tsx";
+import Highlight from "./Highlight.tsx";
+import PathParameters from "./PathParameters.tsx";
 
 export default function Lab3() {
+    console.log("Hello World");
     return (
         <div id="wd-lab3">
             <h3>Lab 3</h3>
@@ -50,9 +56,21 @@ export default function Lab3() {
             <House/>
             <TodoList/>
             <Spreading/>
-                <Destructing/>
-                <FunctionDestructing/>
-                <DestructingImports/>
+            <Destructing/>
+            <FunctionDestructing/>
+            <DestructingImports/>
+            <Classes/>
+            <Add a={3} b={4}/>
+            <h4>Square of 4</h4>
+            <Square>4</Square>
+            <hr/>
+            <Highlight>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipitratione eaque
+                illo minus cum, saepe totam
+                vel nihil repellat nemo explicabo excepturi consectetur. Modi omnis minus sequi
+                maiores, provident voluptates.
+            </Highlight>
+            <PathParameters/>
         </div>
     );
 }
