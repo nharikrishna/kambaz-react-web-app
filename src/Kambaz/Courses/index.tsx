@@ -1,4 +1,4 @@
-import { courses } from "../Database";
+import { useSelector } from "react-redux";
 import CourseNavigation from "./Navigation.tsx";
 import {Navigate, Route, Routes, useParams, useLocation} from "react-router-dom";
 import Modules from "./Modules";
@@ -11,7 +11,8 @@ import PeopleTable from "./People/Table.tsx";
 export default function Courses() {
     const { cid } = useParams();
     const { pathname } = useLocation();
-    const course = courses.find((course) => course._id === cid);
+    const { courses } = useSelector((state: any) => state.coursesReducer);
+    const course = courses.find((course: any) => course._id === cid);
 
     return (
         <div id="wd-courses">
