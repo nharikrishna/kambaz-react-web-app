@@ -9,7 +9,8 @@ interface Enrollment {
 }
 
 const initialState = {
-    enrollments: enrollments
+    enrollments: enrollments,
+    originalEnrollments: enrollments
 };
 
 const enrollmentsSlice = createSlice({
@@ -32,10 +33,13 @@ const enrollmentsSlice = createSlice({
             state.enrollments = state.enrollments.map((e: Enrollment) =>
                 e._id === enrollment._id ? enrollment : e
             ) as Enrollment[];
+        },
+        resetEnrollments: (state) => {
+            state.enrollments = state.originalEnrollments;
         }
     },
 });
 
-export const { addEnrollment, deleteEnrollment, updateEnrollment } =
+export const { addEnrollment, deleteEnrollment, updateEnrollment, resetEnrollments } =
     enrollmentsSlice.actions;
 export default enrollmentsSlice.reducer;
