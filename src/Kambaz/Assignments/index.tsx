@@ -62,16 +62,28 @@ export default function Assignments() {
                                 <Row>
                                     <Col xs={2} className="m-auto"><AssignmentButton /></Col>
                                     <Col xs={isFaculty ? 8 : 10}>
-                                        <Link to={`/Kambaz/Courses/${cid}/Assignments/${assignment.id}`}
-                                              className="wd-assignment-link text-decoration-none text-black">
-                                            <b>{assignment.title}</b>
-                                            <p>
-                                                <span className="text-danger">Multiple Modules </span>
-                                                |
-                                                <b> Not available until</b> {assignment.not_available_until} |
-                                                <br /><b> Due</b> {assignment.due} | {assignment.points}
-                                            </p>
-                                        </Link>
+                                        {isFaculty ? (
+                                            <Link to={`/Kambaz/Courses/${cid}/Assignments/${assignment.id}`}
+                                                  className="wd-assignment-link text-decoration-none text-black">
+                                                <b>{assignment.title}</b>
+                                                <p>
+                                                    <span className="text-danger">Multiple Modules </span>
+                                                    |
+                                                    <b> Not available until</b> {assignment.not_available_until} |
+                                                    <br /><b> Due</b> {assignment.due} | {assignment.points}
+                                                </p>
+                                            </Link>
+                                        ) : (
+                                            <div className="wd-assignment-link text-black">
+                                                <b>{assignment.title}</b>
+                                                <p>
+                                                    <span className="text-danger">Multiple Modules </span>
+                                                    |
+                                                    <b> Not available until</b> {assignment.not_available_until} |
+                                                    <br /><b> Due</b> {assignment.due} | {assignment.points}
+                                                </p>
+                                            </div>
+                                        )}
                                     </Col>
                                     {isFaculty && (
                                         <Col xs={2} className="m-auto">
