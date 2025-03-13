@@ -14,6 +14,9 @@ export default function Assignments() {
         state.assignmentReducer?.assignments?.filter((a: any) => a.course_id === cid) || []
     );
 
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
+    const isFaculty = currentUser && currentUser.role === "FACULTY";
+
     console.log("Assignments", assignments);
 
     return (
@@ -25,16 +28,20 @@ export default function Assignments() {
                            id="wd-search-assignment"/>
                 </Col>
                 <Col xs={6}>
-                    <Link to={`/Kambaz/Courses/${cid}/Assignments/new`} className="text-decoration-none">
-                        <Button variant="danger" className="me-2 float-end">
-                            <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-                            Assignment
-                        </Button>
-                    </Link>
-                    <Button variant="secondary" className="me-2 float-end">
-                        <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-                        Group
-                    </Button>
+                    {isFaculty && (
+                        <>
+                            <Link to={`/Kambaz/Courses/${cid}/Assignments/new`} className="text-decoration-none">
+                                <Button variant="danger" className="me-2 float-end">
+                                    <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
+                                    Assignment
+                                </Button>
+                            </Link>
+                            <Button variant="secondary" className="me-2 float-end">
+                                <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
+                                Group
+                            </Button>
+                        </>
+                    )}
                 </Col>
             </Row>
             <br/>
@@ -43,7 +50,7 @@ export default function Assignments() {
                 <ListGroup.Item className="wd-module p-0 mb-5 fs-5 border-gray">
                     <div className="wd-title p-3 ps-2 bg-secondary">
                         <BsGripVertical className="me-2 fs-3"/> Assignments
-                        <AssignmentTitleButtons/>
+                        {isFaculty && <AssignmentTitleButtons/>}
                         <div className="float-end me-1" style={{
                             border: "2px solid grey",
                             borderRadius: "15px",
@@ -54,7 +61,7 @@ export default function Assignments() {
                             <ListGroup.Item key={assignment.id} className="wd-assignment-list-item p-0 fs-5 border-gray">
                                 <Row>
                                     <Col xs={2} className="m-auto"><AssignmentButton /></Col>
-                                    <Col xs={8}>
+                                    <Col xs={isFaculty ? 8 : 10}>
                                         <Link to={`/Kambaz/Courses/${cid}/Assignments/${assignment.id}`}
                                               className="wd-assignment-link text-decoration-none text-black">
                                             <b>{assignment.title}</b>
@@ -66,9 +73,11 @@ export default function Assignments() {
                                             </p>
                                         </Link>
                                     </Col>
-                                    <Col xs={2} className="m-auto">
-                                        <AssignmentControlButtons assignmentId={assignment.id} />
-                                    </Col>
+                                    {isFaculty && (
+                                        <Col xs={2} className="m-auto">
+                                            <AssignmentControlButtons assignmentId={assignment.id} />
+                                        </Col>
+                                    )}
                                 </Row>
                             </ListGroup.Item>
                         ))}
