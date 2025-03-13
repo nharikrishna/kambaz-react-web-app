@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { assignments } from "../Database"
+import { assignments } from "../Database";
 import { v4 as uuidv4 } from "uuid";
 
 const initialState = {
@@ -12,7 +12,7 @@ const assignmentsSlice = createSlice({
     reducers: {
         addAssignment: (state, { payload: assignment }) => {
             const newAssignment: any = {
-                id: uuidv4(),
+                id: assignment.id || uuidv4(),
                 title: assignment.title,
                 course: assignment.course,
                 course_id: assignment.course_id,
@@ -20,7 +20,8 @@ const assignmentsSlice = createSlice({
                 due: assignment.due,
                 points: assignment.points,
                 not_available_until_date: assignment.not_available_until_date,
-                due_date: assignment.due_date
+                due_date: assignment.due_date,
+                description: assignment.description || ""
             };
             state.assignments = [...state.assignments, newAssignment] as any;
         },
