@@ -4,20 +4,32 @@ import AssignmentTitleButtons from "./AssignmentTitleButtons.tsx";
 import AssignmentButton from "./AssignmentButtons.tsx";
 import {FaPlus} from "react-icons/fa6";
 import { useParams, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import AssignmentControlButtons from "./AssignmentControlButtons.tsx";
+import {useEffect} from "react";
+import * as courseClient from "../Courses/client.ts";
+import {setAssignments} from "./reducer.ts";
 
 export default function Assignments() {
     const { cid } = useParams();
+    const dispatch = useDispatch();
+    const assignments = useSelector((state: any) => state.assignmentReducer.assignments);
 
-    const assignments = useSelector((state: any) =>
-        state.assignmentReducer?.assignments?.filter((a: any) => a.course_id === cid) || []
-    );
+    useEffect(() => {
+        const fetchAssignments = async () => {
+            try {
+                const data = await courseClient.findAssignmentsForCourse(cid);
+                dispatch(setAssignments(data));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchAssignments();
+    }, []);
 
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     const isFaculty = currentUser && currentUser.role === "FACULTY";
 
-    console.log("Assignments", assignments);
 
     return (
         <div id="wd-assignments" className="col-sm-11">
@@ -87,7 +99,7 @@ export default function Assignments() {
                                     </Col>
                                     {isFaculty && (
                                         <Col xs={2} className="m-auto">
-                                            <AssignmentControlButtons assignmentId={assignment.id} />
+                                            <AssignmentControlButtons assignmentId={assignment.id} courseId={cid} />
                                         </Col>
                                     )}
                                 </Row>

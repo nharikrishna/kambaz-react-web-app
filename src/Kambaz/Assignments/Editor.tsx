@@ -3,6 +3,8 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
+import * as coursesClient from "../Courses/client.ts";
+import * as assignmentClient from "../Assignments/client.ts";
 
 interface Assignment {
     id: string;
@@ -68,7 +70,7 @@ export default function AssignmentEditor() {
         }) + " at 12:00 AM";
     };
 
-    const handleSave = (): void => {
+    const handleSave = async (cid: any) => {
         const assignmentToSave: Assignment = {
             ...assignment,
             not_available_until: formatDateForDisplay(assignment.not_available_until_date),
@@ -77,8 +79,11 @@ export default function AssignmentEditor() {
         };
 
         if (aid === "new") {
-            dispatch(addAssignment(assignmentToSave));
+            const newAssignment = await coursesClient.createAssignmentForCourse(cid, assignmentToSave);
+            dispatch(addAssignment(newAssignment));
         } else {
+            console.log("Assingment To Save:" + assignmentToSave.id + assignmentToSave.title);
+            await assignmentClient.updateAssignment(assignmentToSave);
             dispatch(updateAssignment(assignmentToSave));
         }
 
@@ -268,7 +273,7 @@ export default function AssignmentEditor() {
                     <hr/>
                     <button
                         className="btn btn-danger me-2 float-end"
-                        onClick={handleSave}
+                        onClick={() => handleSave(cid)}
                     >
                         Save
                     </button>
