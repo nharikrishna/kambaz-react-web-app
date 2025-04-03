@@ -46,3 +46,14 @@ export const createAssignmentForCourse = async (courseId: string, assignment: an
     return response.data;
 };
 
+export const enrollUserForCourse = async (courseId: any, userId: any) => {
+    const response = await axios.post(
+        `${COURSES_API}/${courseId}/enroll/${userId}`,
+    )
+    return response.data;
+}
+
+export const deleteEnrollment = async (courseId: any, userId: any) => {
+    const { data } = await axios.delete(`${COURSES_API}/${courseId}/enroll/${userId}`);
+    return data;
+}

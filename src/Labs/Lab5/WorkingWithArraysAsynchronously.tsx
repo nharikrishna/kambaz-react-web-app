@@ -11,7 +11,8 @@ export default function WorkingWithArraysAsynchronously() {
         title: "NodeJS Assignment",
         description: "Create a NodeJS server with ExpressJS",
         due: "2021-09-09",
-        completed: false
+        completed: false,
+        editing: false,
     }]);
 
     const [errorMessage, setErrorMessage] = useState(null);
