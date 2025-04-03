@@ -26,7 +26,7 @@ export const fetchTodos = async () => {
     return response.data;
 };
 
-export const removeTodo = async (todo: unknown) => {
+export const removeTodo = async (todo: any) => {
     const response = await axios.get(`${TODOS_API}/${todo.id}/delete`);
     return response.data;
 };
@@ -36,17 +36,17 @@ export const createTodo = async () => {
     return response.data;
 }
 
-export const postTodo = async (todo: unknown) => {
+export const postTodo = async (todo: any) => {
     const response = await axios.post(`${TODOS_API}`, todo);
     return response.data;
 };
 
-export const deleteTodo = async (todo: unknown) => {
+export const deleteTodo = async (todo: any) => {
     const response = await axios.delete(`${TODOS_API}/${todo.id}`);
     return response.data;
 };
 
-export const updateTodo = async (todo: unknown) => {
+export const updateTodo = async (todo: any) => {
     const response = await axios.put(`${TODOS_API}/${todo.id}`, todo);
     return response.data;
 };

@@ -42,7 +42,7 @@ export default function WorkingWithArraysAsynchronously() {
             await client.deleteTodo(todo);
             const newTodos = todos.filter((t) => t.id !== todo.id);
             setTodos(newTodos);
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
             setErrorMessage(error.response.data.message);
         }
@@ -59,7 +59,7 @@ export default function WorkingWithArraysAsynchronously() {
         try {
             await client.updateTodo(todo);
             setTodos(todos.map((t) => (t.id === todo.id ? todo : t)));
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
             setErrorMessage(error.response.data.message);
         }
