@@ -26,12 +26,18 @@ export default function Dashboard() {
         enrollment.course
     );
 
-    const filteredCourses = showAllCourses ? allCourses : courses;
+    const filteredCourses = showAllCourses
+        ? allCourses
+        : allCourses.filter((course: any) => enrolledCourseIds.includes(course._id));
 
     const handleAddNewCourse = async () => {
         try {
             const newCourse = await userClient.createCourse(currentUser._id, currentCourse);
             dispatch(addCourse(newCourse));
+            const response = await courseClient.getEnrollmentIdForUserCourse(newCourse._id, currentUser._id);
+            const enrollment = response.enrollmentId;
+            dispatch(addEnrollment(enrollment));
+
         } catch (error) {
             console.error("Error creating course:", error);
         }
@@ -63,24 +69,16 @@ export default function Dashboard() {
         dispatch(updateCourseField({ field, value }));
     };
 
-    const handleEnroll = (courseId: string) => {
-        const newEnrollment = {
-            user: currentUser._id,
-            course: courseId
-        };
+    const handleEnroll = async (courseId: string) => {
+        const newEnrollment = await courseClient.enrollUserForCourse(courseId, currentUser._id);
+
         dispatch(addEnrollment(newEnrollment));
     };
 
-    const handleUnenroll = (courseId: string) => {
-        const enrollmentToDelete = enrollments.find(
-            (enrollment: any) =>
-                enrollment.user === currentUser._id &&
-                enrollment.course === courseId
-        );
+    const handleUnenroll = async (courseId: string) => {
+        const enrollmentToDelete = await courseClient.deleteEnrollment(courseId, currentUser._id);
 
-        if (enrollmentToDelete) {
-            dispatch(deleteEnrollment(enrollmentToDelete._id));
-        }
+        dispatch(deleteEnrollment(enrollmentToDelete._id));
     };
 
     const toggleEnrollmentView = () => {
