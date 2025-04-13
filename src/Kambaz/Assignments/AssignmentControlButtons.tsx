@@ -4,13 +4,16 @@ import GreenCheckmark from "../Courses/Modules/GreenCheckmark";
 import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { deleteAssignment } from "./reducer.ts";
+import {deleteAssignment, setAssignments} from "./reducer.ts";
+import * as assignmentClient from "./client.ts";
+import {findAssignmentsForCourse} from "../Courses/client.ts";
 
 interface LessonControlButtonsProps {
     assignmentId?: string;
+    courseId?: string;
 }
 
-export default function AssignmentControlButtons({ assignmentId }: LessonControlButtonsProps) {
+export default function AssignmentControlButtons({ assignmentId, courseId }: LessonControlButtonsProps) {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const dispatch = useDispatch();
 
@@ -18,10 +21,14 @@ export default function AssignmentControlButtons({ assignmentId }: LessonControl
         setShowDeleteModal(true);
     };
 
-    const handleConfirmDelete = () => {
+    const handleConfirmDelete = async () => {
         if (assignmentId) {
+            await assignmentClient.deleteAssignment(assignmentId);
             dispatch(deleteAssignment(assignmentId));
         }
+        const assignments = await findAssignmentsForCourse(courseId);
+        console.log(assignments);
+        dispatch(setAssignments(assignments));
         setShowDeleteModal(false);
     };
 

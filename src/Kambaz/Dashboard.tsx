@@ -4,6 +4,8 @@ import { Button, Card, Col, FormControl, Row } from "react-bootstrap";
 import { useState } from "react";
 import { addCourse, deleteCourse, updateCourse, setCourse, updateCourseField } from "./Courses/reducer";
 import { addEnrollment, deleteEnrollment } from "./Enrollments/reducer";
+import * as userClient from "./Account/client";
+import * as courseClient from "./Courses/client";
 
 export default function Dashboard() {
     const dispatch = useDispatch();
@@ -11,7 +13,7 @@ export default function Dashboard() {
     const [showAllCourses, setShowAllCourses] = useState(false);
 
     const { currentUser } = useSelector((state: any) => state.accountReducer);
-    const { courses, currentCourse } = useSelector((state: any) => state.coursesReducer);
+    const { allCourses, currentCourse } = useSelector((state: any) => state.coursesReducer);
     const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
 
     const isFaculty = currentUser && currentUser.role === "FACULTY";
@@ -25,19 +27,38 @@ export default function Dashboard() {
     );
 
     const filteredCourses = showAllCourses
-        ? courses
-        : courses.filter((course: any) => enrolledCourseIds.includes(course._id));
+        ? allCourses
+        : allCourses.filter((course: any) => enrolledCourseIds.includes(course._id));
 
-    const handleAddNewCourse = () => {
-        dispatch(addCourse());
+    const handleAddNewCourse = async () => {
+        try {
+            const newCourse = await userClient.createCourse(currentUser._id, currentCourse);
+            dispatch(addCourse(newCourse));
+            const response = await courseClient.getEnrollmentIdForUserCourse(newCourse._id, currentUser._id);
+            const enrollment = response.enrollmentId;
+            dispatch(addEnrollment(enrollment));
+
+        } catch (error) {
+            console.error("Error creating course:", error);
+        }
     };
 
-    const handleDeleteCourse = (courseId: string) => {
-        dispatch(deleteCourse(courseId));
+    const handleDeleteCourse = async (courseId: string) => {
+        try {
+            await courseClient.deleteCourse(courseId);
+            dispatch(deleteCourse(courseId));
+        } catch (error) {
+            console.error(error);
+        }
     };
 
-    const handleUpdateCourse = () => {
-        dispatch(updateCourse());
+    const handleUpdateCourse = async () => {
+        try {
+            await courseClient.updateCourse(currentCourse);
+            dispatch(updateCourse());
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const handleSetCourse = (course: any) => {
@@ -48,24 +69,16 @@ export default function Dashboard() {
         dispatch(updateCourseField({ field, value }));
     };
 
-    const handleEnroll = (courseId: string) => {
-        const newEnrollment = {
-            user: currentUser._id,
-            course: courseId
-        };
+    const handleEnroll = async (courseId: string) => {
+        const newEnrollment = await courseClient.enrollUserForCourse(courseId, currentUser._id);
+
         dispatch(addEnrollment(newEnrollment));
     };
 
-    const handleUnenroll = (courseId: string) => {
-        const enrollmentToDelete = enrollments.find(
-            (enrollment: any) =>
-                enrollment.user === currentUser._id &&
-                enrollment.course === courseId
-        );
+    const handleUnenroll = async (courseId: string) => {
+        const enrollmentToDelete = await courseClient.deleteEnrollment(courseId, currentUser._id);
 
-        if (enrollmentToDelete) {
-            dispatch(deleteEnrollment(enrollmentToDelete._id));
-        }
+        dispatch(deleteEnrollment(enrollmentToDelete._id));
     };
 
     const toggleEnrollmentView = () => {
@@ -91,7 +104,7 @@ export default function Dashboard() {
                     variant="primary"
                     onClick={toggleEnrollmentView}
                 >
-                    {showAllCourses ? "Enrollments" : "All Courses"}
+                    {showAllCourses ? "My Courses" : "All Courses"}
                 </Button>
             </h1>
             <hr/>
