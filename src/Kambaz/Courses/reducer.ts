@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from "uuid";
 
 interface Course {
     _id: string;
@@ -12,7 +11,7 @@ interface Course {
 }
 
 const initialState = {
-    courses: [] as Course[],
+    enrolledCourses: [] as Course[],
     allCourses: [] as Course[],
     currentCourse: {
         _id: "1234",
@@ -29,19 +28,15 @@ const coursesSlice = createSlice({
     name: "courses",
     initialState,
     reducers: {
-        addCourse: (state) => {
-            const newCourse = {
-                ...state.currentCourse,
-                _id: uuidv4()
-            };
-            state.allCourses = [...state.allCourses, newCourse] as Course[];
-            state.courses = [...state.courses, newCourse] as Course[];
+        addCourse: (state, { payload: course }) => {
+            state.allCourses = [...state.allCourses, course] as Course[];
+            state.enrolledCourses = [...state.enrolledCourses, course] as Course[];
         },
         deleteCourse: (state, { payload: courseId }) => {
             state.allCourses = state.allCourses.filter(
                 (c: Course) => c._id !== courseId
             );
-            state.courses = state.courses.filter(
+            state.enrolledCourses = state.enrolledCourses.filter(
                 (c: Course) => c._id !== courseId
             );
         },
@@ -49,15 +44,15 @@ const coursesSlice = createSlice({
             state.allCourses = state.allCourses.map((c: Course) =>
                 c._id === state.currentCourse._id ? state.currentCourse : c
             ) as Course[];
-            state.courses = state.courses.map((c: Course) =>
+            state.enrolledCourses = state.enrolledCourses.map((c: Course) =>
                 c._id === state.currentCourse._id ? state.currentCourse : c
             ) as Course[];
         },
         setCourse: (state, { payload: course }) => {
             state.currentCourse = course;
         },
-        setCourses: (state, { payload: courses }) => {
-            state.courses = courses;
+        setEnrolledCourses: (state, { payload: courses }) => {
+            state.enrolledCourses = courses;
         },
         setAllCourses: (state, { payload: allCourses }) => {
             state.allCourses = allCourses;
@@ -76,7 +71,7 @@ export const {
     deleteCourse,
     updateCourse,
     setCourse,
-    setCourses,
+    setEnrolledCourses,
     setAllCourses,
     updateCourseField
 } = coursesSlice.actions;

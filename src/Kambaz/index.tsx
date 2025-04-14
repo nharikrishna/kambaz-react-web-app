@@ -10,7 +10,7 @@ import Session from "./Account/Session.tsx";
 import {useEffect} from "react";
 import * as userClient from "./Account/client";
 import * as courseClient from "./Courses/client";
-import {setCourses, setAllCourses} from "./Courses/reducer.ts";
+import {setEnrolledCourses, setAllCourses} from "./Courses/reducer.ts";
 
 const EnrollmentProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const { cid } = useParams();
@@ -38,10 +38,13 @@ export default function Kambaz() {
         try {
             if (currentUser && currentUser._id) {
                 const enrolledCourses = await userClient.findMyCourses(currentUser);
-                dispatch(setCourses(enrolledCourses));
+                dispatch(setEnrolledCourses(enrolledCourses));
 
                 const allCourses = await courseClient.fetchAllCourses();
                 dispatch(setAllCourses(allCourses));
+
+                console.log("Enrolled Courses List", enrolledCourses);
+                console.log("All Courses List", allCourses);
             }
         } catch (error) {
             console.error("Error fetching courses:", error);

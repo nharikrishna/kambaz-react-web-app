@@ -11,8 +11,8 @@ import PeopleTable from "./People/Table.tsx";
 export default function Courses() {
     const { cid } = useParams();
     const { pathname } = useLocation();
-    const { courses } = useSelector((state: any) => state.coursesReducer);
-    const course = courses.find((course: any) => course._id === cid);
+    const { allCourses } = useSelector((state: any) => state.coursesReducer);
+    const course = allCourses.find((course: any) => course._id === cid);
 
     return (
         <div id="wd-courses">

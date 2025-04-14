@@ -2,7 +2,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Col, FormControl, Row } from "react-bootstrap";
 import { useState } from "react";
-import { addCourse, deleteCourse, updateCourse, setCourse, updateCourseField } from "./Courses/reducer";
+import {
+    addCourse,
+    deleteCourse,
+    updateCourse,
+    setCourse,
+    updateCourseField,
+    setEnrolledCourses
+} from "./Courses/reducer";
 import { addEnrollment, deleteEnrollment } from "./Enrollments/reducer";
 import * as userClient from "./Account/client";
 import * as courseClient from "./Courses/client";
@@ -13,22 +20,12 @@ export default function Dashboard() {
     const [showAllCourses, setShowAllCourses] = useState(false);
 
     const { currentUser } = useSelector((state: any) => state.accountReducer);
-    const { allCourses, currentCourse } = useSelector((state: any) => state.coursesReducer);
-    const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
-
+    const { allCourses, currentCourse, enrolledCourses } = useSelector((state: any) => state.coursesReducer);
     const isFaculty = currentUser && currentUser.role === "FACULTY";
-
-    const userEnrollments = enrollments.filter((enrollment: any) =>
-        enrollment.user === currentUser._id
-    );
-
-    const enrolledCourseIds = userEnrollments.map((enrollment: any) =>
-        enrollment.course
-    );
 
     const filteredCourses = showAllCourses
         ? allCourses
-        : allCourses.filter((course: any) => enrolledCourseIds.includes(course._id));
+        : enrolledCourses;
 
     const handleAddNewCourse = async () => {
         try {
@@ -38,6 +35,11 @@ export default function Dashboard() {
             const enrollment = response.enrollmentId;
             dispatch(addEnrollment(enrollment));
 
+            // const refreshedCourses = await userClient.findMyCourses(currentUser);
+            // dispatch(setEnrolledCourses(refreshedCourses));
+
+            console.log("In add course: new course:", newCourse);
+            console.log("In add course: actual course:", enrolledCourses);
         } catch (error) {
             console.error("Error creating course:", error);
         }
@@ -73,12 +75,20 @@ export default function Dashboard() {
         const newEnrollment = await courseClient.enrollUserForCourse(courseId, currentUser._id);
 
         dispatch(addEnrollment(newEnrollment));
+
+        const enrolledCourses = await userClient.findMyCourses(currentUser);
+        dispatch(setEnrolledCourses(enrolledCourses));
     };
 
     const handleUnenroll = async (courseId: string) => {
+        console.log("courseId:", courseId);
         const enrollmentToDelete = await courseClient.deleteEnrollment(courseId, currentUser._id);
-
+        console.log("enrollmentToDelete:", enrollmentToDelete);
         dispatch(deleteEnrollment(enrollmentToDelete._id));
+
+        const enrolledCourses = await userClient.findMyCourses(currentUser);
+        console.log("enrolledCourses",enrolledCourses);
+        dispatch(setEnrolledCourses(enrolledCourses));
     };
 
     const toggleEnrollmentView = () => {
@@ -86,7 +96,7 @@ export default function Dashboard() {
     };
 
     const handleCourseNavigation = (event: React.MouseEvent, courseId: string) => {
-        if (!enrolledCourseIds.includes(courseId)) {
+        if (!isCourseInList(courseId, enrolledCourses)) {
             event.preventDefault();
             alert("You must be enrolled in this course to access it.");
             return;
@@ -94,6 +104,10 @@ export default function Dashboard() {
 
         navigate(`/Kambaz/Courses/${courseId}/Home`);
     };
+
+    function isCourseInList(courseId: string, courses: any[]): boolean {
+        return courses.some(course => course._id === courseId);
+    }
 
     return (
         <div id="wd-dashboard">
@@ -134,8 +148,7 @@ export default function Dashboard() {
             <div id="wd-dashboard-courses">
                 <Row xs={1} md={5} className="g-4">
                     {filteredCourses.map((course: any) => {
-                        const isEnrolled = enrolledCourseIds.includes(course._id);
-
+                        const isEnrolled = isCourseInList(course._id, enrolledCourses);
                         return (
                             <Col key={course._id} className="wd-dashboard-course" style={{width: "300px"}}>
                                 <Card>
