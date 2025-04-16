@@ -7,7 +7,7 @@ import * as coursesClient from "../Courses/client.ts";
 import * as assignmentClient from "../Assignments/client.ts";
 
 interface Assignment {
-    id: string;
+    _id: string;
     title: string;
     course: string;
     course_id: string;
@@ -27,7 +27,7 @@ export default function AssignmentEditor() {
     const dispatch = useDispatch();
 
     const assignmentFromStore = useSelector((state: any) =>
-        state.assignmentReducer?.assignments?.find((a: Assignment) => a.id === aid)
+        state.assignmentReducer?.assignments?.find((a: Assignment) => a._id === aid)
     );
 
 
@@ -82,7 +82,7 @@ export default function AssignmentEditor() {
             const newAssignment = await coursesClient.createAssignmentForCourse(cid, assignmentToSave);
             dispatch(addAssignment(newAssignment));
         } else {
-            console.log("Assingment To Save:" + assignmentToSave.id + assignmentToSave.title);
+            console.log("Assingment To Save:" + assignmentToSave._id + assignmentToSave.title);
             await assignmentClient.updateAssignment(assignmentToSave);
             dispatch(updateAssignment(assignmentToSave));
         }

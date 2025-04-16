@@ -6,6 +6,7 @@ const ASSIGNMENTS_API = `${REMOTE_SERVER}/api/assignments`;
 const axiosWithCredentials = axios.create({ withCredentials: true });
 
 export const deleteAssignment = async (assignmentId: string) => {
+    console.log("Deleting Assignment", assignmentId);
     const response = await axiosWithCredentials.delete(`${ASSIGNMENTS_API}/${assignmentId}`);
     return response.data;
 };

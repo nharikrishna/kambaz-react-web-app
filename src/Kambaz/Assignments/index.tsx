@@ -70,12 +70,12 @@ export default function Assignments() {
                     </div>
                     <ListGroup>
                         {assignments.map((assignment: any) => (
-                            <ListGroup.Item key={assignment.id} className="wd-assignment-list-item p-0 fs-5 border-gray">
+                            <ListGroup.Item key={assignment._id} className="wd-assignment-list-item p-0 fs-5 border-gray">
                                 <Row>
                                     <Col xs={2} className="m-auto"><AssignmentButton /></Col>
                                     <Col xs={isFaculty ? 8 : 10}>
                                         {isFaculty ? (
-                                            <Link to={`/Kambaz/Courses/${cid}/Assignments/${assignment.id}`}
+                                            <Link to={`/Kambaz/Courses/${cid}/Assignments/${assignment._id}`}
                                                   className="wd-assignment-link text-decoration-none text-black">
                                                 <b>{assignment.title}</b>
                                                 <p>
@@ -99,7 +99,7 @@ export default function Assignments() {
                                     </Col>
                                     {isFaculty && (
                                         <Col xs={2} className="m-auto">
-                                            <AssignmentControlButtons assignmentId={assignment.id} courseId={cid} />
+                                            <AssignmentControlButtons assignmentId={assignment._id} courseId={cid} />
                                         </Col>
                                     )}
                                 </Row>

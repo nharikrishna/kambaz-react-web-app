@@ -22,6 +22,7 @@ export default function AssignmentControlButtons({ assignmentId, courseId }: Les
     };
 
     const handleConfirmDelete = async () => {
+        console.log("Inside Delete:", assignmentId, courseId);
         if (assignmentId) {
             await assignmentClient.deleteAssignment(assignmentId);
             dispatch(deleteAssignment(assignmentId));
