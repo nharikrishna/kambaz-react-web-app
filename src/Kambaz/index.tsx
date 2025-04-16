@@ -20,7 +20,7 @@ const EnrollmentProtectedRoute = ({ children }: { children: React.ReactNode }) =
     const isEnrolled = enrollments.some(
         (enrollment: any) =>
             enrollment.user === currentUser._id &&
-            enrollment.course === cid
+            (cid && enrollment.course === cid)
     );
 
     if (!isEnrolled) {
