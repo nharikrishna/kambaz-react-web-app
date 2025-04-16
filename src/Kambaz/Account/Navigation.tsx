@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { NavLink } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
 export default function AccountNavigation() {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -31,6 +31,17 @@ export default function AccountNavigation() {
                         className={({isActive}) => `list-group-item border border-0 ${isActive ? 'active text-danger' : 'inactive'}`}
                     >
                         Profile
+                    </NavLink>
+                </>
+            )}
+
+            {currentUser && currentUser.role === "ADMIN" && (
+                <>
+                    <NavLink
+                        to={`/Kambaz/Account/Users`}
+                        className={({isActive}) => `list-group-item border border-0 ${isActive ? 'active text-danger' : 'inactive'}`}
+                    >
+                        Users
                     </NavLink>
                 </>
             )}
