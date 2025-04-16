@@ -19,9 +19,7 @@ export default function Courses() {
     const [users, setUsers] = useState<any[]>([]);
 
     const fetchUsers = async () => {
-        console.log("Fetching users...");
         const users = await client.findUsersForCourse(cid!);
-        console.log("users found", users);
         setUsers(users);
     };
 
