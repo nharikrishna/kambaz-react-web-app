@@ -20,7 +20,7 @@ export default function Courses() {
 
     const fetchUsers = async () => {
         console.log("Fetching users...");
-        const users = await client.findUsersForCourse(cid);
+        const users = await client.findUsersForCourse(cid!);
         console.log("users found", users);
         setUsers(users);
     };
