@@ -32,7 +32,7 @@ export default function AssignmentEditor() {
 
 
     const [assignment, setAssignment] = useState<Assignment>({
-        id: aid === "new" ? "" : aid || "",
+        _id: aid === "new" ? "" : aid || "",
         title: "",
         course: "",
         course_id: cid || "",
