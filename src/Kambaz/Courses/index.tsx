@@ -1,4 +1,4 @@
-import { courses } from "../Database";
+import { useSelector } from "react-redux";
 import CourseNavigation from "./Navigation.tsx";
 import {Navigate, Route, Routes, useParams, useLocation} from "react-router-dom";
 import Modules from "./Modules";
@@ -7,11 +7,26 @@ import Assignments from "../Assignments";
 import AssignmentEditor from "../Assignments/Editor.tsx";
 import {FaAlignJustify} from "react-icons/fa";
 import PeopleTable from "./People/Table.tsx";
+import {useEffect, useState} from "react";
+import * as client from "./../Account/client.ts";
 
 export default function Courses() {
     const { cid } = useParams();
     const { pathname } = useLocation();
-    const course = courses.find((course) => course._id === cid);
+    const { allCourses } = useSelector((state: any) => state.coursesReducer);
+    const course = allCourses.find((course: any) => course._id === cid);
+
+    const [users, setUsers] = useState<any[]>([]);
+
+    const fetchUsers = async () => {
+        const users = await client.findUsersForCourse(cid!);
+        setUsers(users);
+    };
+
+    useEffect(() => {
+        fetchUsers();
+    }, [cid]);
+
 
     return (
         <div id="wd-courses">
@@ -31,7 +46,7 @@ export default function Courses() {
                         <Route path="Modules" element={<Modules/>}/>
                         <Route path="Assignments" element={<Assignments/>}/>
                         <Route path="Assignments/:aid" element={<AssignmentEditor/>}/>
-                        <Route path="People" element={<PeopleTable/>}/>
+                        <Route path="People" element={<PeopleTable users={users}/>}/>
                     </Routes>
                 </div>
             </div>
